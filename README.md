@@ -25,7 +25,7 @@ Navigate to the desired project directory:
 cd day-1.proj
 ```
 
-Add a ``input.txt`` in the ``day-{number}\bin\Debug\net8.0``
+Add a ``input.txt`` in the ``day-<number>\bin\Debug\net8.0`` directory
 Otherwise you will get an error, for missing a ``.txt`` file
 
 Build and run the project:
@@ -33,24 +33,6 @@ Build and run the project:
 ```
 dotnet run
 ```
-
-# Easily adding a new day
-
-## Purpose
-Automates creating a new project for each Advent of Code day. It initializes a folder, creates a console project, adds it to the .sln file, and prepares input files.
-
-## Usage
-Run the script
-```
-.\AddNewDay.ps1 -DayNumber <Day>
-
-```
-
-## Features
-- Creates a new folder: day-<Day>.
-- Initializes a .NET console project.
-- Adds the project to the .sln file.
-- Creates Input.txt and TestInput.txt.
 
 # Contributing
 Feel free to fork this repository, experiment with alternate solutions, or optimize my implementations! Pull requests are welcome.
