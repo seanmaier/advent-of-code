@@ -1,0 +1,28 @@
+# Ignore JetBrains IDE files
+.idea/
+.vs/
+**/.idea/
+**/.idea/*
+*.xml
+
+
+# Ignore nested .gitignore files
+**/.gitignore
+
+# Ignore build artifacts
+**/bin/
+**/obj/
+*.cache
+*.sourcelink.json
+*.nuget.cache
+*.db*
+
+# Ignore system and temporary files
+*.log
+*.tmp
+
+# Ignore .suo and other temporary Visual Studio files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
