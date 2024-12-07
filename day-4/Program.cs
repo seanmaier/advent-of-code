@@ -14,6 +14,16 @@ class Program
         try
         {
             string[] formatted = File.ReadAllLines(filePath);
+            int length = formatted[0].Length;
+
+            foreach (var line in formatted)
+            {
+                if (line.Length != length)
+                {
+                    throw new InvalidOperationException("Not all strings in the array have the same length.");
+                }
+            }
+
             return formatted;
         }
         catch(Exception e)
