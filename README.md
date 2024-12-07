@@ -25,7 +25,7 @@ Navigate to the desired project directory:
 cd day-1.proj
 ```
 
-Add a ``input.txt`` in the ``day-<number>\bin\Debug\net8.0`` directory
+Add a ``input.txt`` to the directory
 Otherwise you will get an error, for missing a ``.txt`` file
 
 Build and run the project:
