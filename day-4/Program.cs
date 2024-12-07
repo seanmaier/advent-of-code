@@ -10,8 +10,19 @@ class Program
 
     public static string[] ProcessFile(string filePath)
     {
-        string[] formatted = File.ReadAllLines(filePath);
+        try
+        {
+            string[] formatted = File.ReadAllLines(filePath);
+            return formatted;
+        }
+        catch(Exception e)
+        {
+            Console.WriteLine("File couldn't be read");
+            Console.WriteLine(e.Message);
+            Environment.Exit(1);
+        }
 
-        return formatted;
+        return null;
     }
+
 }
