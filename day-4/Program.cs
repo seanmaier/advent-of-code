@@ -5,8 +5,8 @@ class Program
     static void Main(string[] args)
     {
         string[] input = ProcessFile("input.txt");
-        int amount = Part1(input);
-        Console.WriteLine($"The total amount of found 'XMAS' is {amount}");
+        int amount = Part2(input);
+        Console.WriteLine($"The total amount of found 'MAS' is {amount}");
     }
 
     public static string[] ProcessFile(string filePath)
@@ -43,15 +43,15 @@ class Program
         var colLength = input.Length;
         var totalAmount = 0;
         
-        (int, int)[] direction = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (-1, -1), (1, -1), (-1, 1)];  
+        (int, int)[] direction = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (-1, -1), (1, -1), (-1, 1)];
         
         for (int col = 0; col < colLength; col++)
         {
             for (int row = 0; row < rowLength; row++)
             {
-                foreach (var (dx, dy) in direction)
+                foreach (var (dy, dx) in direction)
                 {
-                    if (IsValid(input, col, row, dx, dy)) totalAmount++;
+                    if (IsValidPart1(input, col, row, dy, dx)) totalAmount++;
                 }
             }
         }
@@ -59,7 +59,7 @@ class Program
         return totalAmount;
     }
 
-    public static bool IsValid(string[] grid,int col, int row, int dx, int dy)
+    public static bool IsValidPart1(string[] grid,int col, int row, int dx, int dy)
     {
         var keyword = "XMAS";
         var keywordLength = keyword.Length;
@@ -75,5 +75,55 @@ class Program
         }
 
         return true;
+    }
+    
+    public static int Part2(string[] input)
+    {
+        var rowLength = input[1].Length;
+        var colLength = input.Length;
+        var totalAmount = 0;
+        
+
+        
+        for (int row = 1; row < colLength - 1; row++)
+        {
+            for (int col = 1; col < rowLength; col++)
+            { 
+                if (IsValidPart2(input, row, col)) totalAmount++;
+            }
+        }
+
+        return totalAmount;
+    }
+
+    public static bool IsValidPart2(string[] grid, int row, int col)
+    {
+        (int, int)[] direction = [(-1, -1), (1, -1), (-1, 1), (1, 1)];
+        string[] keyword = ["MSMS", "MMSS", "SSMM", "SMSM"];
+        int letterLength = keyword[0].Length;
+        
+        
+        if (grid[row][col] != 'A') return false;
+
+        for (int scheme = 0; scheme < keyword.Length; scheme++)
+        {
+            var counter = 0;
+            
+            foreach (var (dy,dx ) in direction) 
+            { 
+                var r = row + dx; 
+                var c = col + dy;
+
+                if (r < 0 || r >= grid[0].Length || c < 0 || c >= grid.Length || grid[r][c] != keyword[scheme][counter])
+                {
+                    continue;
+                }
+
+                counter++;
+            }
+
+            if (counter == keyword[0].Length) return true;
+        }
+        return false;
     }
 }
