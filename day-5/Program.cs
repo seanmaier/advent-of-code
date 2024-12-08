@@ -17,7 +17,7 @@ class Program
             Console.WriteLine($"Page: {string.Join(", ", page)}");
         }
 
-        int sum = Part1(pageOrder, pageNumbers);
+        var (sum, unsafeList) = Part1(pageOrder, pageNumbers);
         Console.WriteLine($"The sum is {sum}");
     }
 
@@ -57,28 +57,38 @@ class Program
         return (sortedDict, listOfValues);
     }
 
-    public static int Part1(Dictionary<int, List<int>> pageOrder, List<List<int>> pageNumberList)
+    public static (int, List<List<int>>) Part1(Dictionary<int, List<int>> pageOrder, List<List<int>> pageNumberList)
     {
         int sum = 0;
+        List<List<int>> unsafeList = new List<List<int>>();
         
-        foreach (var pageCol in pageNumberList)
+        foreach (var pageRow in pageNumberList)
         {
             var skip = false;
             
-            for (int page = 0; page < pageCol.Count - 1; page++)
+            for (int page = 0; page < pageRow.Count - 1; page++)
             {
-                int currentKey = pageCol[page];
+                int currentKey = pageRow[page];
                 
-                if (!pageOrder.ContainsKey(currentKey) || !pageOrder[currentKey].Contains(pageCol[page + 1]))
+                if (!pageOrder.ContainsKey(currentKey) || !pageOrder[currentKey].Contains(pageRow[page + 1]))
                 {
                     skip = true;
                     break;
                 }
             }
-            if (skip) continue;
-            sum += pageCol[pageCol.Count / 2];
+            if (skip)
+            {
+                unsafeList.Add(pageRow);
+                continue;
+            }
+            sum += pageRow[pageRow.Count / 2];
         }
 
-        return sum;
+        return (sum, unsafeList);
+    }
+
+    public static int Part2(List<List<int>> unsortedList)
+    {
+        
     }
 }
