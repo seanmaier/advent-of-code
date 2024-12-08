@@ -7,8 +7,10 @@ class Program
     static void Main(string[] args)
     {
         var input = ProcessFile("input.txt");
-        var totalMoves = Part1(input);
-        Console.WriteLine($"The total amount of movements were {totalMoves}");
+        Part2(input);
+        //Console.WriteLine($"The total amount of movements were {totalMoves}");
+        
+        
     }
 
     public static char[,] ProcessFile(string filePath)
@@ -94,4 +96,62 @@ class Program
         return totalAmount;
     }
 
+    public static void Part2(char[,] map)
+    {
+        var direction = 0;
+        var dy = new[] {-1, 0, 1, 0}; // Up, right, down, left
+        var dx = new[] { 0, 1, 0, -1 };
+        var rows = map.GetLength(0);
+        var cols = map.GetLength(1);
+        var amountBlocker = 0;
+     
+        var (y, x) = FindGuard(map, rows, cols);
+        map[y, x] = '|';
+        
+        while (y < rows && y >= 0 && x < cols && x >= 0)
+        {
+            var ny = y + dy[direction];
+            var nx = x + dx[direction];
+
+            if (ny < 0 || ny >= rows || nx < 0 || nx >= cols)
+            {
+                break;
+            }
+
+            if (map[ny, nx] != '#')
+            {
+                y = ny;
+                x = nx;
+                if (map[y, x] == '|' || map[y, x] == '-')
+                {
+                    map[y, x] = '+';
+                    amountBlocker++;
+                }
+                else if (direction % 2 == 0)
+                {
+                    map[y, x] = '|';
+                }
+                else
+                {
+                    map[y, x] = '-';
+                }
+            }
+            else
+            {
+                map[y, x] = '+';
+                direction = (direction + 1) % 4;
+            }
+        }
+        
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < cols; j++)
+            {
+                Console.Write(map[i, j]);
+            }
+            Console.WriteLine();
+        }
+
+        Console.WriteLine($"The amount of blockers are {amountBlocker}");
+    }
 }
