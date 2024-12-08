@@ -82,31 +82,15 @@ class Program
     public static int CalculateSimilarityScore(List<int> leftList, List<int> rightList)
     {
         int sScore = 0;
-        
-        int length = leftList.Count;
+        var groupedRightList = rightList.GroupBy(i => i).ToDictionary(g => g.Key, g => g.Count());
 
-        var g = rightList.GroupBy(i => i);
-
-        for(var i = 0; i < length;i++)
+        foreach (var leftValue in leftList)
         {
-            var leftValue = leftList[i];
-    
-            if (!rightList.Contains(leftValue))
+            if (groupedRightList.TryGetValue(leftValue, out int count))
             {
-                leftList[i] = 0;
-                continue;
-            }
-    
-            foreach (var grp in g) 
-            {
-                if (grp.Key == leftValue)
-                {
-                    leftList[i] *= grp.Count();
-                    break;
-                }
+                sScore += leftValue * count;
             }
 
-            sScore += leftList[i];
         }
 
         return sScore;
