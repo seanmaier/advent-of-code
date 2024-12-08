@@ -16,6 +16,9 @@ class Program
         {
             Console.WriteLine($"Page: {string.Join(", ", page)}");
         }
+
+        int sum = Part1(pageOrder, pageNumbers);
+        Console.WriteLine($"The sum is {sum}");
     }
 
     public static (Dictionary<int, List<int>>, List<List<int>>) ProcessFile(string filePath)
@@ -52,5 +55,30 @@ class Program
         }
         
         return (sortedDict, listOfValues);
+    }
+
+    public static int Part1(Dictionary<int, List<int>> pageOrder, List<List<int>> pageNumberList)
+    {
+        int sum = 0;
+        
+        foreach (var pageCol in pageNumberList)
+        {
+            var skip = false;
+            
+            for (int page = 0; page < pageCol.Count - 1; page++)
+            {
+                int currentKey = pageCol[page];
+                
+                if (!pageOrder.ContainsKey(currentKey) || !pageOrder[currentKey].Contains(pageCol[page + 1]))
+                {
+                    skip = true;
+                    break;
+                }
+            }
+            if (skip) continue;
+            sum += pageCol[pageCol.Count / 2];
+        }
+
+        return sum;
     }
 }
