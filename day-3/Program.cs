@@ -18,25 +18,35 @@ class Program
 
     static List<(int, int)> ProcessFilePart1(string filepath)
     {
-        string pattern = @"mul\((-?\d+),(-?\d+)\)";
-        List<(int, int)> intPairs = new List<(int, int)>();
-        
-        string[] file = File.ReadAllLines(filepath);
-
-        foreach (var line in file)
+        try
         {
-            MatchCollection matches = Regex.Matches(line, pattern);
+            string pattern = @"mul\((-?\d+),(-?\d+)\)";
+            List<(int, int)> intPairs = new List<(int, int)>();
 
-            foreach (Match match in matches)
+            string[] file = File.ReadAllLines(filepath);
+
+            foreach (var line in file)
             {
-                string fullMatch = match.Value;
-                int firstInt = int.Parse(match.Groups[1].Value);
-                int secondInt = int.Parse(match.Groups[2].Value);
-                intPairs.Add((firstInt, secondInt));
+                MatchCollection matches = Regex.Matches(line, pattern);
+
+                foreach (Match match in matches)
+                {
+                    string fullMatch = match.Value;
+                    int firstInt = int.Parse(match.Groups[1].Value);
+                    int secondInt = int.Parse(match.Groups[2].Value);
+                    intPairs.Add((firstInt, secondInt));
+                }
             }
+
+            return intPairs;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"An error occurred: {e.Message}");
+            Environment.Exit(1);
         }
 
-        return intPairs;
+        return null;
     }
 
     static int CalculateSum(List<(int, int)> intPairs)
