@@ -53,32 +53,22 @@ class Program
 
         return (leftList, rightList);
     }
-
     
     
-    
-    /*Avoid Modifying Lists During Iteration:
-
-    Instead of removing elements, you can use indices or create copies of the lists.
-        Alternatively, use data structures better suited for this operation, such as priority queues.
-        Use a While Loop Based on List Counts:
-
-    Use a loop that continues as long as both lists have elements.
-        This prevents index out of range exceptions when one list becomes empty.
-        Optimize the Retrieval of Minimum Values:
-
-    Maintain the lists in sorted order to efficiently get and remove the minimum elements.
-        Use a SortedSet<T> or similar data structure.*/
     public static int CalculateTotalDistance(List<int> leftList, List<int> rightList)
     {
-        int tDistance = 0;
-        int leftListCount = leftList.Count;
-
-        for (int i = 0; i < leftListCount; i++)
+        var tDistance = 0;
+        var leftCopy = new List<int>(leftList);
+        var rightCopy = new List<int>(rightList);
+        
+        leftCopy.Sort();
+        rightCopy.Sort();
+        
+        while(leftCopy.Count > 0 && rightCopy.Count > 0)
         {
-            tDistance += Math.Abs(leftList.Min() - rightList.Min());
-            rightList.RemoveAt(IndexOfMin(rightList));
-            leftList.RemoveAt((IndexOfMin(leftList)));
+            tDistance += Math.Abs(leftCopy.Min() - rightCopy.Min());
+            rightCopy.RemoveAt(IndexOfMin(rightCopy));
+            leftCopy.RemoveAt((IndexOfMin(leftCopy)));
         }
 
         return tDistance;
