@@ -6,21 +6,26 @@ class Program
     {
         var dict = ProcessFile("input.txt");
 
+        /*foreach (var line in dict)
+        {
+            Console.WriteLine($"Key: {line.Key}, Values: {string.Join(", ", line.Value)}");
+        }*/
+
         var amount = Part1(dict);
-        Console.WriteLine($"The sum of the correct calibrations is: {amount}");
+        Console.WriteLine(amount);
     }
 
-    public static Dictionary<int, List<int>> ProcessFile(string filePath)
+    public static Dictionary<long, List<int>> ProcessFile(string filePath)
     {
         try
         {
             var input = File.ReadAllLines(filePath);
-            var  calibrationValues = new Dictionary<int, List<int>>();
-            
+            var calibrationValues = new Dictionary<long, List<int>>();
+
             foreach (var line in input)
             {
                 var parts = line.Split(":");
-                var key = int.Parse(parts[0].Trim());
+                var key = long.Parse(parts[0].Trim());
                 var list = parts[1].Trim().Split(" ").Select(int.Parse).ToList();
                 calibrationValues.Add(key, list);
             }
@@ -37,22 +42,22 @@ class Program
         return null;
     }
 
-    public static int Part1(Dictionary<int, List<int>> dict)
+    public static long Part1(Dictionary<long, List<int>> dict)
     {
         var op = new[] { '+', '*' };
-        var calibrationResult = 0;
-            
+        var calibrationResult = 0L;
+
         foreach (var line in dict)
         {
-                var matchFound = CheckCombinations(line.Value, op, 1, line.Value[0], line.Key);
+            var matchFound = CheckCombinations(line.Value, op, 1, line.Value[0], line.Key);
 
-                if (matchFound) calibrationResult += line.Key;
+            if (matchFound) calibrationResult += line.Key;
         }
 
         return calibrationResult;
     }
 
-    public static bool CheckCombinations(List<int> numbers, char[] operators, int index, int currentResult, int target)
+    public static bool CheckCombinations(List<int> numbers, char[] operators, int index, long currentResult, long target)
     {
         if (index == numbers.Count)
         {
@@ -62,7 +67,7 @@ class Program
         foreach (var op in operators)
         {
             var newResult = currentResult;
-            
+
             switch (op)
             {
                 case '+':
