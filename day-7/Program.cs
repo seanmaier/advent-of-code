@@ -6,10 +6,8 @@ class Program
     {
         var dict = ProcessFile("input.txt");
 
-        foreach (var line in dict)
-        {
-            Console.WriteLine($"Key: {line.Key}, Values: {string.Join(", ", line.Value)}");
-        }
+        var amount = Part1(dict);
+        Console.WriteLine($"The sum of the correct calibrations is: {amount}");
     }
 
     public static Dictionary<int, List<int>> ProcessFile(string filePath)
@@ -37,5 +35,50 @@ class Program
         }
 
         return null;
+    }
+
+    public static int Part1(Dictionary<int, List<int>> dict)
+    {
+        var op = new[] { '+', '*' };
+        var calibrationResult = 0;
+            
+        foreach (var line in dict)
+        {
+                var matchFound = CheckCombinations(line.Value, op, 1, line.Value[0], line.Key);
+
+                if (matchFound) calibrationResult += line.Key;
+        }
+
+        return calibrationResult;
+    }
+
+    public static bool CheckCombinations(List<int> numbers, char[] operators, int index, int currentResult, int target)
+    {
+        if (index == numbers.Count)
+        {
+            return currentResult == target;
+        }
+
+        foreach (var op in operators)
+        {
+            var newResult = currentResult;
+            
+            switch (op)
+            {
+                case '+':
+                    newResult += numbers[index];
+                    break;
+                case '*':
+                    newResult *= numbers[index];
+                    break;
+            }
+
+            if (CheckCombinations(numbers, operators, index + 1, newResult, target))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
