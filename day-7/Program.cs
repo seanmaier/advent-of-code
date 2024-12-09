@@ -15,7 +15,7 @@ class Program
         Console.WriteLine($"The calibrated amount in Part 1 is {part1}");
 
         var part2 = Part2(dict);
-        Console.WriteLine($"The calibrated amount in Part 1 is {part2}");
+        Console.WriteLine($"The calibrated amount in Part 2 is {part2}");
     }
 
     public static Dictionary<long, List<int>> ProcessFile(string filePath)
