@@ -37,7 +37,7 @@ class Program
         var rows = map.GetLength(0);
         var cols = map.GetLength(1);
 
-        Dictionary<(int row, int column), char> all_locs = new Dictionary<(int, int), char>();
+        Dictionary<(int row, int column), char> allLocs = new Dictionary<(int, int), char>();
         
         for (var currRow = 0; currRow < rows; currRow++)
         {
@@ -45,38 +45,33 @@ class Program
             {
                 var c = map[currRow, currCol];
                 if(c == '.') continue;
-                /*
-                foreach (var position in antennas.Where(position => position.character == c))
-                {
-                    var distance = (position.row - currRow, position.col - currCol);
-                    
-                    var ant1 = (position.col - distance.Item1)
-
-                }
-                */
-                all_locs.Add((currRow, currCol), c);
+                allLocs.Add((currRow, currCol), c);
             }
         }
         
-        HashSet<object> antinodes = new HashSet<object>();
+        var antinodes = new HashSet<(int, int)>();
 
-        foreach (var freq in all_locs)
+        foreach (List<(int row, int column)> locs in allLocs.Select(freq => allLocs.Keys.ToList()))
         {
-            var locs = all_locs.Keys.ToList();
             for (int i = 0; i < locs.Count; i++)
             {
                 for (int j = i + 1; j < locs.Count; j++)
                 {
-                    if (all_locs[locs[i]] != all_locs[locs[j]]) continue;
+                    if (allLocs[locs[i]] != allLocs[locs[j]]) continue;
                     var a = locs[i];
                     var b = locs[j];
 
-                    foreach (var antinode in GetAntiNodes(a, b, map))
+                    foreach (var antinode in GetAntiNodesPart2(a, b, map)) // Change to Part1 or Part2!!!
                     {
                         antinodes.Add(antinode);
                         map[antinode.Item1, antinode.Item2] = '#';
                     } 
                 }
+            }
+
+            foreach (var loc in locs)
+            {
+                antinodes.Add(loc);
             }
         }
 
@@ -92,7 +87,7 @@ class Program
         return antinodes.Count;
     }
 
-    static List<(int, int)> GetAntiNodes((int x,int y) a, (int x, int y) b, char[,] map)
+    static List<(int, int)> GetAntiNodesPart1((int x,int y) a, (int x, int y) b, char[,] map)
     {
         var rowLength = map.GetLength(0);
         var colLength = map.GetLength(1);
@@ -120,5 +115,41 @@ class Program
     static bool InBounds(int x, int y, int bx, int by)
     {
         return (x >= 0 && x < bx && y >= 0 && y < by );
+    }
+
+    static int Part2(char[,] map)
+    {
+        return -1;
+    }
+    
+    static List<(int, int)> GetAntiNodesPart2((int x,int y) a, (int x, int y) b, char[,] map)
+    {
+        var rowLength = map.GetLength(0);
+        var colLength = map.GetLength(1);
+        int ax = a.x, ay = a.y;
+        int bx = b.x, by = b.y;
+
+        int xDistance = bx - ax, yDistance = by - ay;
+        int cx = ax - xDistance, cy = ay - yDistance;
+        int dx = bx + xDistance, dy = by + yDistance;
+        
+
+        var antinodes = new List<(int, int)>();
+        
+        while(InBounds(cx, cy, rowLength, colLength))
+        {
+            antinodes.Add((cx, cy));
+            cx -= xDistance;
+            cy -= yDistance;
+        }
+
+        while (InBounds(dx, dy, rowLength, colLength))
+        {
+            antinodes.Add((dx, dy));
+            dx += xDistance;
+            dy += yDistance;
+        }
+
+        return antinodes;
     }
 }
