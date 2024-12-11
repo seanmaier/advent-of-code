@@ -12,7 +12,19 @@ class Program
 
     static char[] ProcessFile(string filePath)
     {
-        string input = File.ReadAllText(filePath);
-        return input.ToCharArray();
+        try
+        {
+            var input = File.ReadAllText(filePath);
+            return input.ToCharArray();
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Couldn't process file");
+            Console.WriteLine(e.Message);
+            Environment.Exit(1);
+        }
+
+        return null;
     }
 }
