@@ -15,21 +15,32 @@ class Program
 
     static char[,] ProcessFile(string filePath)
     {
-        var input = File.ReadAllLines(filePath);
-        var rows = input.Length;
-        var cols = input[0].Length;
-        var map = new char[rows, cols];
-        
-        
-        for (var i = 0; i < rows; i++)
+        try
         {
-            for (var j = 0; j < cols; j++)
+            var input = File.ReadAllLines(filePath);
+            var rows = input.Length;
+            var cols = input[0].Length;
+            var map = new char[rows, cols];
+            
+            
+            for (var i = 0; i < rows; i++)
             {
-                map[i, j] = input[i][j];
+                for (var j = 0; j < cols; j++)
+                {
+                    map[i, j] = input[i][j];
+                }
             }
+
+            return map;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Couldn't process file.");
+            Console.WriteLine(e.Message);
+            Environment.Exit(1);
         }
 
-        return map;
+        return null;
     }
 
     static int Part1(char[,] map)
