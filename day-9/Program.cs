@@ -91,15 +91,15 @@ class Program
         return array;
     }
 
-    static int CheckSum(List<string> array)
+    static long CheckSum(List<string> array)
     {
-        var sum = 0;
+        var sum = (long) 0;
         
         for (var i = 0; i < array.Count; i++)
         {
             if (array[i] == ".") break;
 
-            sum += i * Convert.ToInt32(array[i]);
+            sum += i * Convert.ToInt64(array[i]);
         }
 
         return sum;
