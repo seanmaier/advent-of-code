@@ -8,7 +8,8 @@ class Program
     static void Main(string[] args)
     {
         var processed = ProcessFile("input.txt");
-        Rearrange(processed);
+        var rearrange = Rearrange(processed);
+        SwapPositions(rearrange);
     }
 
     static int[] ProcessFile(string filePath)
@@ -56,4 +57,29 @@ class Program
 
         return after.ToString().ToCharArray();
     }
+
+    static char[] SwapPositions(char[] array)
+    {
+        var totalDots = array.Count(c => c == '.');
+        var right = array.Length - 1;               
+        
+        for (var left = 0; left < right; left++)
+        {
+            if (array[left] != '.') continue;
+            
+            while (right > left && array[right] == '.')
+            {
+                right--;
+            }
+
+            if (right <= left) continue;
+            array[left] = array[right];
+            array[right] = '.';
+            right--; 
+        }
+
+        Console.WriteLine(string.Join(" ", array));
+        return array;
+    }
+
 }
