@@ -14,6 +14,8 @@ class Program
             }
             Console.WriteLine();
         }
+
+        Part1(map);
     }
 
     static char[,] ProcessFile(string filePath)
@@ -44,6 +46,31 @@ class Program
             Environment.Exit(1);
             return null;
         }
+
+    }
+    
+    static int Part1(char[,] map)
+    {
+        var rows = map.GetLength(0);
+        var cols = map.GetLength(1);
+        var start = new List<(int x, int y)>();
+
+        for (var row = 0; row < rows; row++)
+        {
+            for (var col = 0; col < cols; col++)
+            {
+                if (map[row, col] != '0') continue;
+                start.Add((row, col));
+            }
+
+
+        }
         
+        foreach (var coordinates in start)
+        {
+            Console.WriteLine(coordinates);
+        }
+        
+        return -1;
     }
 }
