@@ -9,9 +9,14 @@ class Program
     {
         var processed = ProcessFile("input.txt");
         var rearrange = Rearrange(processed);
-        var swapped = SwapPositions(rearrange);
-        var sum = CheckSum(swapped);
-        Console.WriteLine($"The sum is {sum}");
+        //var swapped = SwapPositions(rearrange);
+        //var sum = CheckSum(swapped);
+        //Console.WriteLine($"The sum is {sum}");
+
+        Console.WriteLine(string.Join(" ", rearrange));
+        var compact = SwapCompact(rearrange);
+        var sum2 = CheckSum(compact);
+        Console.WriteLine($"The sum is {sum2}");
     }
 
     static int[] ProcessFile(string filePath)
@@ -69,7 +74,6 @@ class Program
 
     static List<string> SwapPositions(List<string> array)
     {
-        var totalDots = array.Count(c => c == ".");
         var right = array.Count - 1;
         
         for (var left = 0; left < right; left++)
@@ -82,12 +86,81 @@ class Program
             }
 
             if (right <= left) continue;
-            array[left] = array[right];
-            array[right] = ".";
+            Swap(left, right, array);
             right--; 
         }
 
-        Console.WriteLine(string.Join(" ", array));
+        return array;
+    }
+    
+    static List<string> SwapCompact(List<string> array)
+    {
+        var left = 0;
+        var dotCounts = new Dictionary<int, int>();
+
+
+        for (var right = array.Count - 1; "0" != array[right]; right--)
+        {
+            
+            // Adjusting left and right
+            if (array[right] == ".") continue;
+            
+            while (right > left && array[left] != ".")
+            {
+                left++;
+            }
+            
+            
+            // Check for amount of numbers
+            if (right <= 0) break;
+            var countNumb = 1;
+            var rightCopy = right;
+
+            
+            while (array[rightCopy] == array[rightCopy - 1])
+            {
+                countNumb++;
+                rightCopy--;
+            };
+
+            
+            dotCounts.Clear();
+            // Check for amount of space
+            for (var i = left; i < right; i++)
+            {
+                if (array[i] != ".") continue;
+                var key = i;
+                var count = 0;
+                while (i < array.Count && array[i] == ".")
+                {
+                    count++;
+                    i++;
+                }
+                dotCounts.Add(key, count);
+            }
+            
+            var isSpace = dotCounts.Any(count => countNumb <= count.Value);
+            if (!isSpace)
+            {
+                right -= (countNumb - 1);
+                continue;
+            }
+
+            
+            // Replace the values
+            var index = dotCounts.First(dots => dots.Value >= countNumb).Key;
+            for (var i = 0; i < countNumb; i++)
+            {
+                Swap(index, right, array);
+                index++;
+                right--; 
+            }
+            
+            // Used to make outer loop work, after inner loop
+            right += 1;
+        }
+        
+
         return array;
     }
 
@@ -97,12 +170,18 @@ class Program
         
         for (var i = 0; i < array.Count; i++)
         {
-            if (array[i] == ".") break;
+            if (array[i] == ".") continue;
 
             sum += i * Convert.ToInt64(array[i]);
         }
 
         return sum;
+    }
+
+    static void Swap(int left, int right, List<string> array)
+    {
+        array[left] = array[right];
+        array[right] = ".";
     }
 
 }
